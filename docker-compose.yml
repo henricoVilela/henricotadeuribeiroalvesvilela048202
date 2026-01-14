@@ -1,0 +1,32 @@
+services:
+  postgres:
+    image: postgres:17.4
+    container_name: artistas-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-artistas_db}
+      POSTGRES_USER: ${POSTGRES_USER:-artistas_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-artistas_pass}
+      TZ: America/Cuiaba
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - artistas-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-artistas_user} -d ${POSTGRES_DB:-artistas_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  postgres_data:
+    driver: local
+    name: artistas-postgres-data
+
+networks:
+  artistas-network:
+    driver: bridge
+    name: artistas-network
