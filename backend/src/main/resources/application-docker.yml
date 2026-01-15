@@ -1,0 +1,25 @@
+# Perfil: docker
+# Uso: Execução dentro do Docker Compose
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/${POSTGRES_DB:artistas_db}
+    username: ${POSTGRES_USER:artistas_user}
+    password: ${POSTGRES_PASSWORD:artistas_pass}
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+  flyway:
+    clean-disabled: true
+
+logging:
+  level:
+    root: INFO
+    com.projeto: INFO
+    org.springframework.security: WARN
+    org.hibernate.SQL: WARN
+    org.flywaydb: INFO
