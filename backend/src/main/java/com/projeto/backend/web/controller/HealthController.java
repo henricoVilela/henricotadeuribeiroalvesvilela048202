@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.projeto.backend.web.openapi.HealthControllerOpenApi;
+
 @RestController
 @RequestMapping("/api/v1")
-public class HealthController {
+public class HealthController implements HealthControllerOpenApi {
 
     @Autowired
     private DataSource dataSource;

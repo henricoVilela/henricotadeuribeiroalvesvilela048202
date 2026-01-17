@@ -15,6 +15,7 @@ import com.projeto.backend.web.dto.auth.AuthRequest;
 import com.projeto.backend.web.dto.auth.AuthResponse;
 import com.projeto.backend.web.dto.auth.RefreshRequest;
 import com.projeto.backend.web.dto.auth.RegisterRequest;
+import com.projeto.backend.web.openapi.AuthControllerOpenApi;
 
 import jakarta.validation.Valid;
 
@@ -23,7 +24,7 @@ import jakarta.validation.Valid;
  */
 @RestController
 @RequestMapping("/api/v1/auth")
-public class AuthController {
+public class AuthController implements AuthControllerOpenApi {
 	
 	 private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
