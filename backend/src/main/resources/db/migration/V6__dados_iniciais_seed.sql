@@ -4,7 +4,7 @@
 --   - password: admin123 (hash bcrypt gerado com strength 10)
 
 INSERT INTO usuario (username, email, password_hash, nome_completo, ativo) VALUES
-('admin', 'admin@sistema.com', '$2a$10$8K1p/fOvKgHYh5.R3DqYxOO1AqD5O8FKD.Ky8NJFyJKwJyqZ5YGCK', 'Administrador do Sistema', true);
+('admin', 'admin@sistema.com', '$2a$10$SAIXdRSGazzOQBDHgBNHb.f2WtmZgASJPE5Fp/W7qi6vgU89hHP96', 'Administrador do Sistema', true);
 
 -- -----------------------------------------------------------------------------
 -- Artistas de exemplo conforme especificação do projeto
