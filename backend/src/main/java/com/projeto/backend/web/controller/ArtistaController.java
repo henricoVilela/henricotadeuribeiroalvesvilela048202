@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,5 +36,13 @@ public class ArtistaController implements ArtistaControllerOpenApi {
 
         Page<ArtistaResponse> artistas = artistaService.listar(nome, page, size, sortBy, sortDir);
         return ResponseEntity.ok(artistas);
+    }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<ArtistaResponse> buscarPorId(@PathVariable Long id) {
+        logger.info("GET /api/v1/artistas/{}", id);
+
+        ArtistaResponse artista = artistaService.buscarPorId(id);
+        return ResponseEntity.ok(artista);
     }
 }

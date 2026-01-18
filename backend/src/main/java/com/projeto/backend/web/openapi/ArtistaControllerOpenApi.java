@@ -17,9 +17,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @SecurityRequirement(name = "bearerAuth")
 public interface ArtistaControllerOpenApi {
 
-	/**
-     * Lista artistas com paginação, filtro e ordenação.
-     */
     @Operation(
             summary = "Listar artistas",
             description = "Retorna uma lista paginada de artistas com filtro por nome e ordenação"
@@ -35,4 +32,6 @@ public interface ArtistaControllerOpenApi {
             @Parameter(description = "Campo para ordenação (nome, tipo, anoFormacao)") String sortBy,
             @Parameter(description = "Direção da ordenação (asc ou desc)") String sortDir
     );
+    
+    public ResponseEntity<ArtistaResponse> buscarPorId(@Parameter(description = "ID do artista") Long id);
 }

@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.projeto.backend.web.dto.artista.ArtistaResponse;
 
+import jakarta.persistence.EntityNotFoundException;
+
 /**
  * Serviço para operações de negócio relacionadas a artistas.
  */
@@ -38,7 +40,6 @@ public class ArtistaService {
         logger.info("Listando artistas - nome: {}, page: {}, size: {}, sortBy: {}, sortDir: {}",
                 nome, page, size, sortBy, sortDir);
 
-        // Configura ordenação
         Sort sort = Sort.by(sortDir.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy);
         Pageable pageable = PageRequest.of(page, size, sort);
 
@@ -55,6 +56,23 @@ public class ArtistaService {
             Long totalAlbuns = (Long) obj[1];
             return ArtistaResponse.fromEntityWithAlbumCount(artista, totalAlbuns);
         });
+    }
+    
+    /**
+     * Busca artista por ID.
+     *
+     * @param id ID do artista
+     * @return ArtistaResponse
+     * @throws EntityNotFoundException Se não encontrar
+     */
+    @Transactional(readOnly = true)
+    public ArtistaResponse buscarPorId(Long id) {
+        logger.info("Buscando artista por ID: {}", id);
+
+        Artista artista = artistaRepository.findByIdAndAtivoTrue(id)
+                .orElseThrow(() -> new EntityNotFoundException("Artista não encontrado com ID: " + id));
+
+        return ArtistaResponse.fromEntity(artista);
     }
 
 }
