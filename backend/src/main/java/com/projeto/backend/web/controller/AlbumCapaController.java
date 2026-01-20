@@ -1,5 +1,7 @@
 package com.projeto.backend.web.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +18,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.projeto.backend.domain.album.AlbumCapaService;
 import com.projeto.backend.domain.album.TipoCapa;
 import com.projeto.backend.web.dto.album.AlbumCapaResponse;
+import com.projeto.backend.web.openapi.AlbumCapaControllerOpenApi;
 
 @RestController
 @RequestMapping("/api/v1")
-public class AlbumCapaController {
+public class AlbumCapaController implements AlbumCapaControllerOpenApi {
 	
 	private static final Logger logger = LoggerFactory.getLogger(AlbumCapaController.class);
 
@@ -39,5 +42,17 @@ public class AlbumCapaController {
 
         AlbumCapaResponse response = albumCapaService.upload(albumId, file, tipoCapa);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping(value = "/albuns/{albumId}/capas/multiplas", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<List<AlbumCapaResponse>> uploadMultiple(
+        @PathVariable Long albumId,
+        @RequestParam("files") List<MultipartFile> files,
+        @RequestParam(defaultValue = "FRENTE") TipoCapa tipoCapa
+    ) {
+        logger.info("POST /api/v1/albuns/{}/capas/multiplas - {} arquivos", albumId, files.size());
+
+        List<AlbumCapaResponse> responses = albumCapaService.uploadMultiple(albumId, files, tipoCapa);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responses);
     }
 }

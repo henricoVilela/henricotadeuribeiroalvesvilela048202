@@ -1,5 +1,8 @@
 package com.projeto.backend.domain.album;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,5 +71,22 @@ public class AlbumCapaService {
         String presignedUrl = storageService.getPresignedUrl(capa.getObjectKey());
 
         return AlbumCapaResponse.fromEntityWithUrl(capa, presignedUrl);
+    }
+    
+    /**
+     * Faz upload de múltiplas capas para um álbum.
+     *
+     * @param albumId ID do álbum
+     * @param files Lista de arquivos
+     * @param tipoCapa Tipo das capas
+     * @return Lista de AlbumCapaResponse
+     */
+    @Transactional
+    public List<AlbumCapaResponse> uploadMultiple(Long albumId, List<MultipartFile> files, TipoCapa tipoCapa) {
+        logger.info("Iniciando upload de {} capas para álbum ID: {}", files.size(), albumId);
+
+        return files.stream()
+                .map(file -> upload(albumId, file, tipoCapa))
+                .collect(Collectors.toList());
     }
 }

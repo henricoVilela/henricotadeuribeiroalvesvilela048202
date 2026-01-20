@@ -1,5 +1,7 @@
 package com.projeto.backend.web.openapi;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,5 +35,21 @@ public interface AlbumCapaControllerOpenApi {
         @Parameter(description = "ID do álbum") Long albumId,
         @Parameter(description = "Arquivo de imagem") MultipartFile file,
         @Parameter(description = "Tipo da capa", example = "FRENTE") TipoCapa tipoCapa
+    );
+	
+	@Operation(
+            summary = "Upload múltiplo de capas",
+            description = "Faz upload de múltiplas imagens de capa para um álbum. Aceita apenas arquivos de imagem com tamanho máximo de 10MB cada."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Capas enviadas com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Arquivo(s) inválido(s)", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Álbum não encontrado", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Não autorizado", content = @Content)
+    })
+    public ResponseEntity<List<AlbumCapaResponse>> uploadMultiple(
+        @Parameter(description = "ID do álbum") Long albumId,
+        @Parameter(description = "Lista de arquivos de imagem") List<MultipartFile> files,
+        @Parameter(description = "Tipo das capas", example = "FRENTE") TipoCapa tipoCapa
     );
 }
