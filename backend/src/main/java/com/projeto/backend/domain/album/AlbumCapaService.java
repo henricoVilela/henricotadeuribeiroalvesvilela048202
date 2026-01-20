@@ -194,4 +194,27 @@ public class AlbumCapaService {
 
         logger.info("Capa removida com sucesso: {}", capaId);
     }
+    
+    /**
+     * Remove todas as capas de um álbum.
+     *
+     * @param albumId ID do álbum
+     */
+    @Transactional
+    public void deletarTodasPorAlbum(Long albumId) {
+        logger.info("Removendo todas as capas do álbum ID: {}", albumId);
+
+        List<AlbumCapa> capas = albumCapaRepository.findByAlbumIdOrderByOrdemAsc(albumId);
+
+        for (AlbumCapa capa : capas) {
+            try {
+                storageService.delete(capa.getObjectKey());
+            } catch (Exception e) {
+                logger.warn("Erro ao remover arquivo do MinIO: {}", capa.getObjectKey());
+            }
+        }
+
+        albumCapaRepository.deleteByAlbumId(albumId);
+        logger.info("Todas as capas removidas do álbum: {}", albumId);
+    }
 }

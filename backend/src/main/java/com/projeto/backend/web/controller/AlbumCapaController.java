@@ -102,4 +102,14 @@ public class AlbumCapaController implements AlbumCapaControllerOpenApi {
         albumCapaService.deletar(capaId);
         return ResponseEntity.noContent().build();
     }
+    
+    @DeleteMapping("/albuns/{albumId}/capas")
+    public ResponseEntity<Void> deletarTodas(
+        @PathVariable Long albumId
+    ) {
+        logger.info("DELETE /api/v1/albuns/{}/capas", albumId);
+
+        albumCapaService.deletarTodasPorAlbum(albumId);
+        return ResponseEntity.noContent().build();
+    }
 }

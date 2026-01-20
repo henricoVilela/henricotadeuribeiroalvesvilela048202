@@ -22,4 +22,11 @@ public interface AlbumCapaRepository extends JpaRepository<AlbumCapa, Long> {
      * @return Lista de capas
      */
     List<AlbumCapa> findByAlbumIdOrderByOrdemAsc(Long albumId);
+    
+    /**
+     * Remove todas as capas de um álbum.
+     *
+     * @param albumId ID do álbum
+     */
+    void deleteByAlbumId(Long albumId);
 }
