@@ -1,16 +1,16 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../../../core/services/auth.service';
-import { ToastService } from '../../../core/services/toast.service';
 import { Router, RouterLink } from '@angular/router';
 import { Loading } from '../../../shared/components/loaging/loading.component';
+import { AuthService } from '../../../core/services/auth.service';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
-  selector: 'app-login',
-  imports: [ReactiveFormsModule, Loading, RouterLink],
-  templateUrl: './login.html',
+  selector: 'app-register',
+  imports: [ReactiveFormsModule, RouterLink, Loading],
+  templateUrl: './register.html',
 })
-export class Login {
+export class Register {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private toastService = inject(ToastService);
@@ -19,8 +19,10 @@ export class Login {
   loading = signal(false);
 
   form: FormGroup = this.fb.group({
-    username: ['', Validators.required],
-    password: ['', Validators.required]
+    nome: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    username: ['', [Validators.required, Validators.minLength(3)]],
+    password: ['', [Validators.required, Validators.minLength(6)]]
   });
 
   isFieldInvalid(field: string): boolean {
@@ -36,9 +38,9 @@ export class Login {
 
     this.loading.set(true);
 
-    this.authService.login(this.form.value).subscribe({
+    this.authService.register(this.form.value).subscribe({
       next: () => {
-        this.toastService.success('Login realizado com sucesso!');
+        this.toastService.success('Conta criada com sucesso!');
         this.router.navigate(['/dashboard']);
       },
       error: () => {
