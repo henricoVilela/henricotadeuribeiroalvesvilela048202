@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
+import com.projeto.backend.infrastructure.sync.RegionalSyncService;
 import com.projeto.backend.web.dto.regional.RegionalResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -58,5 +59,26 @@ public interface RegionalControllerOpenApi {
         @ApiResponse(responseCode = "401", description = "Não autorizado", content = @Content)
     })
     public ResponseEntity<List<RegionalResponse>> listarTodas();
+	
+	@Operation(
+        summary = "Sincronizar regionais (async)",
+        description = "Inicia sincronização em background e retorna imediatamente"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "202", description = "Sincronização iniciada"),
+        @ApiResponse(responseCode = "409", description = "Sincronização já em andamento", content = @Content),
+        @ApiResponse(responseCode = "401", description = "Não autorizado", content = @Content)
+    })
+    public ResponseEntity<Map<String, Object>> sincronizarAsync();
+	
+	@Operation(
+            summary = "Status da sincronização",
+            description = "Retorna informações sobre a última sincronização e status atual"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Status retornado com sucesso"),
+            @ApiResponse(responseCode = "401", description = "Não autorizado", content = @Content)
+    })
+    public ResponseEntity<RegionalSyncService.SyncStatus> getStatus();
 
 }

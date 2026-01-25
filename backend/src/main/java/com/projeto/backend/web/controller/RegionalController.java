@@ -67,12 +67,38 @@ public class RegionalController implements RegionalControllerOpenApi {
         ));
     }
 
- 
     @GetMapping("/todas")
     public ResponseEntity<List<RegionalResponse>> listarTodas() {
         logger.info("GET /api/v1/regionais/todas");
 
         List<RegionalResponse> regionais = regionalService.listarTodas();
         return ResponseEntity.ok(regionais);
+    }
+    
+    @PostMapping("/sync/async")
+    public ResponseEntity<Map<String, Object>> sincronizarAsync() {
+        logger.info("POST /api/v1/regionais/sync/async");
+
+        if (regionalSyncService.isSyncInProgress()) {
+            return ResponseEntity.status(409).body(Map.of(
+                    "success", false,
+                    "message", "Sincronização já em andamento"
+            ));
+        }
+
+        regionalSyncService.sincronizarAsync();
+
+        return ResponseEntity.accepted().body(Map.of(
+                "success", true,
+                "message", "Sincronização iniciada em background. Acompanhe via WebSocket em /topic/sync"
+        ));
+    }
+
+    @GetMapping("/sync/status")
+    public ResponseEntity<RegionalSyncService.SyncStatus> getStatus() {
+        logger.info("GET /api/v1/regionais/sync/status");
+
+        RegionalSyncService.SyncStatus status = regionalSyncService.getStatus();
+        return ResponseEntity.ok(status);
     }
 }
