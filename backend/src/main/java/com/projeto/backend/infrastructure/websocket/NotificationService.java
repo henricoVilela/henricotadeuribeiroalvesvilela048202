@@ -52,8 +52,41 @@ public class NotificationService {
     }
     
     /**
-     * Método interno para envio de mensagens.
+     * Envia notificação de álbum criado.
      */
+    public void notifyAlbumCreated(Long albumId, String nome, String artistaNome) {
+        NotificationMessage message = new NotificationMessage(
+                NotificationType.ALBUM_CREATED,
+                "Novo álbum cadastrado: " + nome + " - " + artistaNome,
+                new AlbumPayload(albumId, nome, artistaNome),
+                LocalDateTime.now()
+        );
+        send("/topic/albuns", message);
+        logger.info("Notificação enviada: Álbum criado - {}", nome);
+    }
+
+    public void notifyAlbumUpdated(Long albumId, String nome, String artistaNome) {
+        NotificationMessage message = new NotificationMessage(
+                NotificationType.ALBUM_UPDATED,
+                "Álbum atualizado: " + nome,
+                new AlbumPayload(albumId, nome, artistaNome),
+                LocalDateTime.now()
+        );
+        send("/topic/albuns", message);
+        logger.info("Notificação enviada: Álbum atualizado - {}", nome);
+    }
+
+    public void notifyAlbumDeleted(Long albumId) {
+        NotificationMessage message = new NotificationMessage(
+                NotificationType.ALBUM_DELETED,
+                "Álbum removido",
+                new AlbumPayload(albumId, null, null),
+                LocalDateTime.now()
+        );
+        send("/topic/albuns", message);
+        logger.info("Notificação enviada: Álbum removido - ID {}", albumId);
+    }
+    
     private void send(String destination, NotificationMessage message) {
         try {
             messagingTemplate.convertAndSend(destination, message);
@@ -65,7 +98,10 @@ public class NotificationService {
     public enum NotificationType {
         ARTISTA_CREATED,
         ARTISTA_UPDATED,
-        ARTISTA_DELETED
+        ARTISTA_DELETED,
+        ALBUM_CREATED,
+        ALBUM_UPDATED,
+        ALBUM_DELETED,
     }
 
     public record NotificationMessage(
@@ -76,4 +112,6 @@ public class NotificationService {
     ) {}
     
     public record ArtistaPayload(Long id, String nome) {}
+    
+    public record AlbumPayload(Long id, String nome, String artistaNome) {}
 }

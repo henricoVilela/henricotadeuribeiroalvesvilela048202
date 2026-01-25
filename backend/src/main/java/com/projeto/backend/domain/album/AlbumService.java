@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.projeto.backend.domain.artista.Artista;
 import com.projeto.backend.domain.artista.ArtistaService;
+import com.projeto.backend.infrastructure.websocket.NotificationService;
 import com.projeto.backend.web.dto.album.AlbumRequest;
 import com.projeto.backend.web.dto.album.AlbumResponse;
 
@@ -37,6 +38,9 @@ public class AlbumService {
     
     @Autowired
     private ArtistaService artistaService;
+    
+    @Autowired
+    private NotificationService notificationService;
     
     /**
      * Lista todos os álbuns de um artista (sem paginação).
@@ -147,7 +151,9 @@ public class AlbumService {
 
         album = albumRepository.save(album);
         logger.info("Álbum criado com ID: {}", album.getId());
-
+        
+        notificationService.notifyAlbumCreated(album.getId(), album.getNome(), artista.getNome());
+        
         return AlbumResponse.fromEntity(album);
     }
     
@@ -181,7 +187,9 @@ public class AlbumService {
 
         album = albumRepository.save(album);
         logger.info("Álbum atualizado: {}", album.getId());
-
+        
+        notificationService.notifyAlbumUpdated(album.getId(), album.getNome(), album.getArtista().getNome());
+        
         return AlbumResponse.fromEntity(album);
     }
     
@@ -200,6 +208,8 @@ public class AlbumService {
 
         album.setAtivo(false);
         albumRepository.save(album);
+        
+        notificationService.notifyAlbumDeleted(id);
 
         logger.info("Álbum inativado: {}", id);
     }
