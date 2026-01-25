@@ -38,6 +38,10 @@ export const routes: Routes = [
                 path: ':id',
                 loadComponent: () => import('./features/albuns/album-detail/album-detail').then(m => m.AlbumDetail)
             },
+            {
+                path: ':id/editar',
+                loadComponent: () => import('./features/albuns/album-form/album-form').then(m => m.AlbumForm)
+            }
         ]
     },
     {
