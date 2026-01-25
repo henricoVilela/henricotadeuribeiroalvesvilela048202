@@ -18,9 +18,6 @@ public class NotificationService {
         this.messagingTemplate = messagingTemplate;
     }
 	
-    /**
-     * Envia notificação de artista criado.
-     */
     public void notifyArtistaCreated(Long artistaId, String nome) {
         NotificationMessage message = new NotificationMessage(
                 NotificationType.ARTISTA_CREATED,
@@ -30,6 +27,28 @@ public class NotificationService {
         );
         send("/topic/artistas", message);
         logger.info("Notificação enviada: Artista criado - {}", nome);
+    }
+
+    public void notifyArtistaUpdated(Long artistaId, String nome) {
+        NotificationMessage message = new NotificationMessage(
+                NotificationType.ARTISTA_UPDATED,
+                "Artista atualizado: " + nome,
+                new ArtistaPayload(artistaId, nome),
+                LocalDateTime.now()
+        );
+        send("/topic/artistas", message);
+        logger.info("Notificação enviada: Artista atualizado - {}", nome);
+    }
+
+    public void notifyArtistaDeleted(Long artistaId) {
+        NotificationMessage message = new NotificationMessage(
+                NotificationType.ARTISTA_DELETED,
+                "Artista removido",
+                new ArtistaPayload(artistaId, null),
+                LocalDateTime.now()
+        );
+        send("/topic/artistas", message);
+        logger.info("Notificação enviada: Artista removido - ID {}", artistaId);
     }
     
     /**

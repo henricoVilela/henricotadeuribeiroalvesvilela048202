@@ -144,6 +144,8 @@ public class ArtistaService {
         var response = ArtistaResponse.fromEntity(artista);
         response.setUpdatedAt(LocalDateTime.now());
         
+        notificationService.notifyArtistaUpdated(artista.getId(), artista.getNome());
+        
         return response;
     }
     
@@ -163,7 +165,9 @@ public class ArtistaService {
         // Soft delete
         artista.setAtivo(false);
         artistaRepository.save(artista);
-
+        
+        notificationService.notifyArtistaDeleted(id);
+        
         logger.info("Artista inativado: {}", id);
     }
     
