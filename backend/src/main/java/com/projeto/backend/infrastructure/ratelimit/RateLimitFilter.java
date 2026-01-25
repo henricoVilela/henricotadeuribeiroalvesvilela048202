@@ -1,4 +1,4 @@
-package com.projeto.backend.infrastructure.storage.ratelimit;
+package com.projeto.backend.infrastructure.ratelimit;
 
 import java.io.IOException;
 import java.time.LocalDateTime;

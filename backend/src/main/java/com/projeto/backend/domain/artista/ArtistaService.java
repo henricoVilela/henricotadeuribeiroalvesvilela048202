@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.projeto.backend.infrastructure.websocket.NotificationService;
 import com.projeto.backend.web.dto.artista.ArtistaRequest;
 import com.projeto.backend.web.dto.artista.ArtistaResponse;
 
@@ -27,6 +28,9 @@ public class ArtistaService {
 
     @Autowired
     private ArtistaRepository artistaRepository;
+    
+    @Autowired
+    private NotificationService notificationService;
     
     /**
      * Lista artistas com paginação, filtro e ordenação.
@@ -103,6 +107,8 @@ public class ArtistaService {
         artista = artistaRepository.save(artista);
         logger.info("Artista criado com ID: {}", artista.getId());
 
+        notificationService.notifyArtistaCreated(artista.getId(), artista.getNome());
+        
         return ArtistaResponse.fromEntity(artista);
     }
     

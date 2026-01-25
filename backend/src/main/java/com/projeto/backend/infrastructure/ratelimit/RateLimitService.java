@@ -1,4 +1,4 @@
-package com.projeto.backend.infrastructure.storage.ratelimit;
+package com.projeto.backend.infrastructure.ratelimit;
 
 import java.time.Duration;
 import java.util.Map;
