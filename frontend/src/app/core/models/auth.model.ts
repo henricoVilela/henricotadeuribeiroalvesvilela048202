@@ -11,15 +11,15 @@ export interface RegisterRequest {
 }
 
 export interface AuthResponse {
-  accessToken: string;
-  refreshToken: string;
-  tokenType: string;
-  expiresIn: number;
+  access_token: string;
+  refresh_token: string;
+  token_type: string;
+  expires_in: number;
   username: string;
 }
 
 export interface RefreshRequest {
-  refreshToken: string;
+  refresh_token: string;
 }
 
 export interface User {

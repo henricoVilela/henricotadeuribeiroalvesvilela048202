@@ -1,1 +1,58 @@
-<p>login works!</p>
+<div class="min-h-screen flex items-center justify-center bg-linear-to-br from-primary-500 to-primary-700 p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">🎵 Artistas & Álbuns</h1>
+            <p class="text-gray-600">Faça login para continuar</p>
+        </div>
+
+        <!-- Form -->
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <!-- Username -->
+            <div class="mb-4">
+                <label for="username" class="label">Usuário</label>
+                <input type="text" id="username" formControlName="username" class="input"
+                    [class.input-error]="isFieldInvalid('username')" placeholder="Digite seu usuário" />
+                @if (isFieldInvalid('username')) {
+                <p class="error-message">Usuário é obrigatório</p>
+                }
+            </div>
+
+            <!-- Password -->
+            <div class="mb-6">
+                <label for="password" class="label">Senha</label>
+                <input type="password" id="password" formControlName="password" class="input"
+                    [class.input-error]="isFieldInvalid('password')" placeholder="Digite sua senha" />
+                @if (isFieldInvalid('password')) {
+                <p class="error-message">Senha é obrigatória</p>
+                }
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="btn btn-primary w-full py-3" [disabled]="loading()">
+                @if (loading()) {
+                <app-loading size="sm" />
+                <span class="ml-2">Entrando...</span>
+                } @else {
+                Entrar
+                }
+            </button>
+        </form>
+
+        <!-- Register link -->
+        <p class="mt-6 text-center text-gray-600">
+            Não tem uma conta?
+            <a routerLink="/register" class="text-primary-600 hover:text-primary-700 font-medium">
+                Cadastre-se
+            </a>
+        </p>
+
+        <!-- Demo credentials -->
+        <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+            <p class="text-xs text-gray-500 text-center">
+                <strong>Credenciais de demo:</strong><br>
+                Usuário: admin | Senha: admin123
+            </p>
+        </div>
+    </div>
+</div>

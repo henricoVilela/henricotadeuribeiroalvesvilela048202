@@ -41,6 +41,12 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         }
       }
 
+      if (error.status === 400 && error.error?.errors) {
+        const validationErrors = error.error.errors;
+        const errorMessages = Object.values(validationErrors).flat();
+        message = errorMessages.join(' ');
+      }
+
       // Não mostra toast para 401 (será tratado pelo auth interceptor)
       if (error.status !== 401) {
         toastService.error(message);

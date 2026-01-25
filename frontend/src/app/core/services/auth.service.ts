@@ -2,7 +2,7 @@ import { Injectable, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap, catchError, throwError } from 'rxjs';
-import { environment } from '../../../environments/environment.prod';
+import { environment } from '../../../environments/environment';
 import { AuthResponse, LoginRequest, RefreshRequest, RegisterRequest } from '../models/auth.model';
 
 const TOKEN_KEY = 'access_token';
@@ -46,7 +46,7 @@ export class AuthService {
       return throwError(() => new Error('No refresh token available'));
     }
 
-    const request: RefreshRequest = { refreshToken };
+    const request: RefreshRequest = { refresh_token: refreshToken };
     return this.http.post<AuthResponse>(`${this.apiUrl}/refresh`, request).pipe(
       tap(response => this.handleAuthSuccess(response)),
       catchError(error => {
@@ -74,8 +74,8 @@ export class AuthService {
   }
 
   private handleAuthSuccess(response: AuthResponse): void {
-    localStorage.setItem(TOKEN_KEY, response.accessToken);
-    localStorage.setItem(REFRESH_TOKEN_KEY, response.refreshToken);
+    localStorage.setItem(TOKEN_KEY, response.access_token);
+    localStorage.setItem(REFRESH_TOKEN_KEY, response.refresh_token);
     localStorage.setItem(USER_KEY, response.username);
     this._isAuthenticated.set(true);
     this._currentUser.set(response.username);

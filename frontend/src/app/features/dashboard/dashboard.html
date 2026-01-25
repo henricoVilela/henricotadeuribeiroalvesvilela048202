@@ -1,0 +1,137 @@
+<app-layout>
+    <div class="space-y-6">
+        <!-- Header -->
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Dashboard</h1>
+            <p class="text-gray-600">Visão geral do sistema</p>
+        </div>
+
+        @if (loading()) {
+        <app-loading [fullPage]="true" text="Carregando..." />
+        } @else {
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="card card-body">
+                <div class="flex items-center">
+                    <div class="p-3 bg-primary-100 rounded-lg">
+                        <span class="text-2xl">🎤</span>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm text-gray-600">Total de Artistas</p>
+                        <p class="text-2xl font-bold text-gray-900">{{ totalArtistas() }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-body">
+                <div class="flex items-center">
+                    <div class="p-3 bg-green-100 rounded-lg">
+                        <span class="text-2xl">💿</span>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm text-gray-600">Total de Álbuns</p>
+                        <p class="text-2xl font-bold text-gray-900">{{ totalAlbuns() }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-body">
+                <div class="flex items-center">
+                    <div class="p-3 bg-yellow-100 rounded-lg">
+                        <span class="text-2xl">🎸</span>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm text-gray-600">Gêneros</p>
+                        <p class="text-2xl font-bold text-gray-900">{{ generos().length }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-body">
+                <div class="flex items-center">
+                    <div class="p-3 bg-purple-100 rounded-lg">
+                        <span class="text-2xl">📸</span>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm text-gray-600">Capas</p>
+                        <p class="text-2xl font-bold text-gray-900">{{ totalCapas() }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="card">
+                <div class="card-header flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-gray-900">Artistas Recentes</h2>
+                    <a routerLink="/artistas" class="text-primary-600 hover:text-primary-700 text-sm">
+                        Ver todos →
+                    </a>
+                </div>
+                <div class="card-body">
+                    @if (artistas().length === 0) {
+                    <p class="text-gray-500 text-center py-4">Nenhum artista cadastrado</p>
+                    } @else {
+                    <ul class="divide-y divide-gray-100">
+                        @for (artista of artistas().slice(0, 5); track artista.id) {
+                        <li class="py-3 flex items-center justify-between">
+                            <div>
+                                <p class="font-medium text-gray-900">{{ artista.nome }}</p>
+                                <p class="text-sm text-gray-500">{{ artista.tipoDescricao }} • {{ artista.totalAlbuns }}
+                                    álbuns</p>
+                            </div>
+                            <a [routerLink]="['/artistas', artista.id]"
+                                class="text-primary-600 hover:text-primary-700 text-sm">
+                                Ver
+                            </a>
+                        </li>
+                        }
+                    </ul>
+                    }
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-gray-900">Álbuns Recentes</h2>
+                    <a routerLink="/albuns" class="text-primary-600 hover:text-primary-700 text-sm">
+                        Ver todos →
+                    </a>
+                </div>
+                <div class="card-body">
+                    @if (albuns().length === 0) {
+                    <p class="text-gray-500 text-center py-4">Nenhum álbum cadastrado</p>
+                    } @else {
+                    <ul class="divide-y divide-gray-100">
+                        @for (album of albuns().slice(0, 5); track album.id) {
+                        <li class="py-3 flex items-center justify-between">
+                            <div>
+                                <p class="font-medium text-gray-900">{{ album.nome }}</p>
+                                <p class="text-sm text-gray-500">{{ album.artistaNome }} • {{ album.anoLancamento ||
+                                    'N/A' }}</p>
+                            </div>
+                            <a [routerLink]="['/albuns', album.id]"
+                                class="text-primary-600 hover:text-primary-700 text-sm">
+                                Ver
+                            </a>
+                        </li>
+                        }
+                    </ul>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Add Buttons -->
+        <div class="flex flex-wrap gap-4">
+            <a routerLink="/artistas/novo" class="btn btn-primary">
+                + Novo Artista
+            </a>
+            <a routerLink="/albuns/novo" class="btn btn-outline">
+                + Novo Álbum
+            </a>
+        </div>
+        }
+    </div>
+</app-layout>

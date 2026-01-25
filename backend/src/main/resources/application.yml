@@ -57,7 +57,7 @@ jwt:
 
 # CORS
 cors:
-  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:4200,http://localhost:3000}
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:4200,http://localhost:3000,http://127.0.0.1:4200}
 
 # SpringDoc OpenAPI / Swagger
 springdoc:

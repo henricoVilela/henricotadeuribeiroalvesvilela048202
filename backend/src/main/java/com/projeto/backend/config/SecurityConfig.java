@@ -38,7 +38,7 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthEntryPoint;
     private final UserDetailsService userDetailsService;
 
-    @Value("${cors.allowed-origins:http://localhost:4200,http://localhost:3000}")
+    @Value("${cors.allowed-origins:http://localhost:4200,http://localhost:3000,http://127.0.0.1:4200}")
     private String allowedOrigins;
 
     public SecurityConfig(
