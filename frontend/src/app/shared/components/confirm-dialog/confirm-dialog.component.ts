@@ -43,7 +43,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
     }
   `
 })
-export class ConfirmDialogComponent {
+export class ConfirmDialog {
   @Input() isOpen = false;
   @Input() title = 'Confirmar';
   @Input() message = 'Tem certeza que deseja continuar?';

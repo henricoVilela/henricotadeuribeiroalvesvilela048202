@@ -98,7 +98,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
     </div>
   `
 })
-export class PaginationComponent {
+export class Pagination {
   @Input() currentPage = 0;
   @Input() totalPages = 0;
   @Input() totalElements = 0;

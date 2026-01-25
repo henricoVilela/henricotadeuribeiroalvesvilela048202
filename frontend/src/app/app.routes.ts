@@ -21,5 +21,15 @@ export const routes: Routes = [
         path: 'register',
         loadComponent: () => import('./features/auth/register/register').then(m => m.Register),
         canActivate: [guestGuard]
-    }
+    },
+    {
+        path: 'albuns',
+        canActivate: [authGuard],
+        children: [
+            {
+                path: '',
+                loadComponent: () => import('./features/albuns/album-list/album-list').then(m => m.AlbumList)
+            }
+        ]
+    },
 ];
