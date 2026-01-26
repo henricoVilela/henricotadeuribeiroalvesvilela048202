@@ -27,6 +27,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401 && !req.url.includes('/auth/')) {
         // Token expirado, tenta refresh
+        console.debug('Token expirado, tentando refresh...');
         if (!isRefreshing) {
           isRefreshing = true;
           
