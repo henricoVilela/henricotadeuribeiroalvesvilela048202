@@ -3,62 +3,47 @@
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-        <h1 class="text-2xl font-bold text-gray-900">Álbuns</h1>
-        <p class="text-gray-600">Gerencie os álbuns do sistema</p>
+        <h1 class="text-2xl font-bold text-gray-900">Artistas</h1>
+        <p class="text-gray-600">Gerencie os artistas do sistema</p>
         </div>
-        <a routerLink="/albuns/novo" class="btn btn-primary">
-        + Novo Álbum
+        <a routerLink="/artistas/novo" class="btn btn-primary">
+        + Novo Artista
         </a>
     </div>
     
-    <!-- Filters -->
+    <!-- Search -->
     <div class="card card-body">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <input
+        <div class="flex flex-col sm:flex-row gap-4">
+        <div class="flex-1">
+            <input
             type="text"
-            [(ngModel)]="searchNome"
+            [(ngModel)]="searchTerm"
             (keyup.enter)="search()"
             class="input"
             placeholder="Buscar por nome..."
-        />
-        <input
-            type="text"
-            [(ngModel)]="searchArtista"
-            (keyup.enter)="search()"
-            class="input"
-            placeholder="Buscar por artista..."
-        />
-        <select
-            [(ngModel)]="searchGenero"
-            (change)="search()"
-            class="input"
-        >
-            <option value="">Todos os gêneros</option>
-            @for (genero of generos(); track genero) {
-            <option [value]="genero">{{ genero }}</option>
-            }
-        </select>
-        <div class="flex gap-2">
-            <button (click)="search()" class="btn btn-primary flex-1">
+            />
+        </div>
+        <button (click)="search()" class="btn btn-primary">
             Buscar
-            </button>
+        </button>
+        @if (searchTerm) {
             <button (click)="clearSearch()" class="btn btn-secondary">
             Limpar
             </button>
-        </div>
+        }
         </div>
     </div>
     
     <!-- Content -->
     @if (loading()) {
-        <app-loading [fullPage]="true" text="Carregando álbuns..." />
+        <app-loading [fullPage]="true" text="Carregando artistas..." />
     } @else {
         <div class="card">
-        @if (albuns().length === 0) {
+        @if (artistas().length === 0) {
             <div class="card-body text-center py-12">
-            <p class="text-gray-500 text-lg">Nenhum álbum encontrado</p>
-            <a routerLink="/albuns/novo" class="btn btn-primary mt-4">
-                Cadastrar primeiro álbum
+            <p class="text-gray-500 text-lg">Nenhum artista encontrado</p>
+            <a routerLink="/artistas/novo" class="btn btn-primary mt-4">
+                Cadastrar primeiro artista
             </a>
             </div>
         } @else {
@@ -67,35 +52,24 @@
                 <thead>
                 <tr>
                     <th>Nome</th>
-                    <th>Artista</th>
-                    <th>Ano</th>
-                    <th>Gênero</th>
+                    <th>Tipo</th>
+                    <th>País</th>
+                    <th>Álbuns</th>
                     <th>Status</th>
                     <th class="text-right">Ações</th>
                 </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                @for (album of albuns(); track album.id) {
+                @for (artista of artistas(); track artista.id) {
                     <tr>
-                    <td class="font-medium">{{ album.nome }}</td>
+                    <td class="font-medium">{{ artista.nome }}</td>
                     <td>
-                        <a 
-                        [routerLink]="['/artistas', album.artistaId]"
-                        class="text-primary-600 hover:text-primary-700"
-                        >
-                        {{ album.artistaNome }}
-                        </a>
+                        <span class="badge badge-info">{{ artista.tipoDescricao }}</span>
                     </td>
-                    <td>{{ album.anoLancamento || '-' }}</td>
+                    <td>{{ artista.paisOrigem || '-' }}</td>
+                    <td>{{ artista.totalAlbuns }}</td>
                     <td>
-                        @if (album.genero) {
-                        <span class="badge badge-info">{{ album.genero }}</span>
-                        } @else {
-                        -
-                        }
-                    </td>
-                    <td>
-                        @if (album.ativo) {
+                        @if (artista.ativo) {
                         <span class="badge badge-success">Ativo</span>
                         } @else {
                         <span class="badge badge-danger">Inativo</span>
@@ -103,19 +77,19 @@
                     </td>
                     <td class="text-right space-x-2">
                         <a 
-                        [routerLink]="['/albuns', album.id]"
+                        [routerLink]="['/artistas', artista.id]"
                         class="text-primary-600 hover:text-primary-700"
                         >
                         Ver
                         </a>
                         <a 
-                        [routerLink]="['/albuns', album.id, 'editar']"
+                        [routerLink]="['/artistas', artista.id, 'editar']"
                         class="text-yellow-600 hover:text-yellow-700"
                         >
                         Editar
                         </a>
                         <button 
-                        (click)="confirmDelete(album)"
+                        (click)="confirmDelete(artista)"
                         class="text-red-600 hover:text-red-700"
                         >
                         Excluir
@@ -128,11 +102,11 @@
             </div>
             
             <app-pagination
-                [currentPage]="currentPage()"
-                [totalPages]="totalPages()"
-                [totalElements]="totalElements()"
-                [pageSize]="pageSize"
-                (pageChange)="onPageChange($event)"
+            [currentPage]="currentPage()"
+            [totalPages]="totalPages()"
+            [totalElements]="totalElements()"
+            [pageSize]="pageSize"
+            (pageChange)="onPageChange($event)"
             />
         }
         </div>
@@ -141,12 +115,12 @@
     
     <!-- Delete Confirmation -->
     <app-confirm-dialog
-        [isOpen]="showDeleteDialog()"
-        title="Excluir Álbum"
-        [message]="'Tem certeza que deseja excluir o álbum ' + albumToDelete()?.nome + '?'"
-        confirmText="Excluir"
-        type="danger"
-        (confirm)="deleteAlbum()"
-        (cancel)="showDeleteDialog.set(false)"
+    [isOpen]="showDeleteDialog()"
+    title="Excluir Artista"
+    [message]="'Tem certeza que deseja excluir o artista ' + artistaToDelete()?.nome + '?'"
+    confirmText="Excluir"
+    type="danger"
+    (confirm)="deleteArtista()"
+    (cancel)="showDeleteDialog.set(false)"
     />
 </app-layout>

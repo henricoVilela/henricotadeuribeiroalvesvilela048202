@@ -5,9 +5,9 @@ import { Pagination } from '../../../shared/components/pagination/pagination.com
 import { ConfirmDialog } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Album } from '../../../core/models/album.model';
 import { ToastService } from '../../../core/services/toast.service';
-import { AlbumService } from '../../../core/services/album.service';
+import { ArtistaService } from '../../../core/services/artista.service';
+import { Artista } from '../../../core/models/artista.model';
 
 @Component({
   selector: 'app-artista-list',
@@ -22,47 +22,34 @@ import { AlbumService } from '../../../core/services/album.service';
   templateUrl: './artista-list.html',
 })
 export class ArtistaList implements OnInit {
-  private albumService = inject(AlbumService);
+  private artistaService = inject(ArtistaService);
   private toastService = inject(ToastService);
 
   loading = signal(true);
-  albuns = signal<Album[]>([]);
-  generos = signal<string[]>([]);
+  artistas = signal<Artista[]>([]);
   currentPage = signal(0);
   totalPages = signal(0);
   totalElements = signal(0);
   pageSize = 10;
-
-  searchNome = '';
-  searchArtista = '';
-  searchGenero = '';
+  searchTerm = '';
 
   showDeleteDialog = signal(false);
-  albumToDelete = signal<Album | null>(null);
+  artistaToDelete = signal<Artista | null>(null);
 
   ngOnInit(): void {
-    this.loadGeneros();
-    this.loadAlbuns();
+    this.loadArtistas();
   }
 
-  private loadGeneros(): void {
-    this.albumService.listarGeneros().subscribe({
-      next: (generos) => this.generos.set(generos)
-    });
-  }
-
-  loadAlbuns(): void {
+  loadArtistas(): void {
     this.loading.set(true);
-
-    this.albumService.listar(
-      this.searchNome || undefined,
-      this.searchArtista || undefined,
-      this.searchGenero || undefined,
+    
+    this.artistaService.listar(
+      this.searchTerm || undefined,
       this.currentPage(),
       this.pageSize
     ).subscribe({
       next: (page) => {
-        this.albuns.set(page.content);
+        this.artistas.set(page.content);
         this.totalPages.set(page.totalPages);
         this.totalElements.set(page.totalElements);
         this.loading.set(false);
@@ -75,41 +62,38 @@ export class ArtistaList implements OnInit {
 
   search(): void {
     this.currentPage.set(0);
-    this.loadAlbuns();
+    this.loadArtistas();
   }
 
   clearSearch(): void {
-    this.searchNome = '';
-    this.searchArtista = '';
-    this.searchGenero = '';
+    this.searchTerm = '';
     this.search();
   }
 
   onPageChange(page: number): void {
     this.currentPage.set(page);
-    this.loadAlbuns();
+    this.loadArtistas();
   }
 
-  confirmDelete(album: Album): void {
-    this.albumToDelete.set(album);
+  confirmDelete(artista: Artista): void {
+    this.artistaToDelete.set(artista);
     this.showDeleteDialog.set(true);
   }
 
-  deleteAlbum(): void {
-    const album = this.albumToDelete();
-    if (!album) return;
+  deleteArtista(): void {
+    const artista = this.artistaToDelete();
+    if (!artista) return;
 
-    this.albumService.deletar(album.id).subscribe({
+    this.artistaService.deletar(artista.id).subscribe({
       next: () => {
-        this.toastService.success('Álbum excluído com sucesso!');
+        this.toastService.success('Artista excluído com sucesso!');
         this.showDeleteDialog.set(false);
-        this.albumToDelete.set(null);
-        this.loadAlbuns();
+        this.artistaToDelete.set(null);
+        this.loadArtistas();
       },
       error: () => {
         this.showDeleteDialog.set(false);
       }
     });
   }
-
 }

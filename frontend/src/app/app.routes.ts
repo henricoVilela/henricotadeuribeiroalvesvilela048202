@@ -52,6 +52,10 @@ export const routes: Routes = [
                 path: '',
                 loadComponent: () => import('./features/artistas/artista-list/artista-list').then(m => m.ArtistaList)
             },
+            {
+                path: ':id',
+                loadComponent: () => import('./features/artistas/artista-detail/artista-detail').then(m => m.ArtistaDetail)
+            }
         ]
     },
     {
