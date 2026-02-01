@@ -1,12 +1,13 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { WsIndicator } from '../ws-indicator/ws-indicator.component';
 
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, WsIndicator],
   template: `
     <div class="min-h-screen bg-gray-50">
       <!-- Sidebar -->
@@ -50,6 +51,9 @@ import { AuthService } from '../../../core/services/auth.service';
         
         <!-- User info -->
         <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
+          <div class="mb-3 pb-3 border-b border-gray-100">
+            <app-ws-indicator />
+          </div>
           <div class="flex items-center justify-between">
             <div class="flex items-center">
               <div class="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
@@ -81,6 +85,9 @@ import { AuthService } from '../../../core/services/auth.service';
           ☰
         </button>
         <h1 class="ml-4 text-lg font-bold text-primary-600">🎵 Artistas</h1>
+        <div class="ml-auto">
+          <app-ws-indicator />
+        </div>
       </div>
       
       <!-- Backdrop for mobile -->

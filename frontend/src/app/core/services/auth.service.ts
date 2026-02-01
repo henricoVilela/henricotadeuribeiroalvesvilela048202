@@ -1,7 +1,7 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, tap, catchError, throwError } from 'rxjs';
+import { Observable, tap, catchError, throwError, BehaviorSubject } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { AuthResponse, LoginRequest, RefreshRequest, RegisterRequest } from '../models/auth.model';
 
@@ -20,6 +20,12 @@ export class AuthService {
 
   readonly isAuthenticated = computed(() => this._isAuthenticated());
   readonly currentUser = computed(() => this._currentUser());
+
+  // BehaviorSubject para compatibilidade com RxJS
+  private _isAuthenticated$ = new BehaviorSubject<boolean>(this.hasValidToken());
+
+  // Observable para uso com subscribe
+  readonly isAuthenticated$ = this._isAuthenticated$.asObservable();
 
   constructor(
     private http: HttpClient,
@@ -61,6 +67,7 @@ export class AuthService {
     localStorage.removeItem(REFRESH_TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
     this._isAuthenticated.set(false);
+    this._isAuthenticated$.next(false);
     this._currentUser.set(null);
     this.router.navigate(['/login']);
   }
@@ -78,6 +85,7 @@ export class AuthService {
     localStorage.setItem(REFRESH_TOKEN_KEY, response.refresh_token);
     localStorage.setItem(USER_KEY, response.username);
     this._isAuthenticated.set(true);
+    this._isAuthenticated$.next(true);
     this._currentUser.set(response.username);
   }
 
