@@ -4,7 +4,6 @@ import java.io.InputStream;
 import java.security.MessageDigest;
 import java.util.HexFormat;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,11 +12,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;
-import io.minio.http.Method;
 
 @Service
 public class StorageService {
@@ -27,11 +24,14 @@ public class StorageService {
     @Autowired
     private MinioClient minioClient;
 
-    @Value("${minio.bucket-name:album-covers}")
+    @Value("${minio.bucket-name:album-capas}")
     private String bucketName;
 
     @Value("${minio.presigned-url-expiration:30}")
     private int presignedUrlExpiration;
+    
+    @Value("${minio.public-url:http://localhost:9000}")
+    private String publicUrl;
     
     /**
      * Resultado do upload.
@@ -144,32 +144,10 @@ public class StorageService {
         }
     }
     
-    /**
-     * Gera uma URL pré-assinada para acesso ao arquivo.
-     * A URL expira conforme configuração (padrão: 30 minutos).
-     *
-     * @param objectKey Chave do objeto no bucket
-     * @return URL pré-assinada
-     */
-    public String getPresignedUrl(String objectKey) {
-        try {
-            String url = minioClient.getPresignedObjectUrl(
-                GetPresignedObjectUrlArgs.builder()
-                    .bucket(bucketName)
-                    .object(objectKey)
-                    .method(Method.GET)
-                    .expiry(presignedUrlExpiration, TimeUnit.MINUTES)
-                    .build()
-            );
-
-            logger.debug("URL pré-assinada gerada para: {}", objectKey);
-            return url;
-
-        } catch (Exception e) {
-            logger.error("Erro ao gerar URL pré-assinada: {}", e.getMessage());
-            throw new StorageException("Falha ao gerar URL de acesso", e);
-        }
+    public String getPublicUrl(String objectKey) {
+        return publicUrl + "/" + bucketName + "/" + objectKey;
     }
+
     
     /**
      * Remove um arquivo do MinIO.

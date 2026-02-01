@@ -68,7 +68,7 @@ public class AlbumCapaService {
         logger.info("Capa salva com ID: {}", capa.getId());
 
         // Gera URL pré-assinada
-        String presignedUrl = storageService.getPresignedUrl(capa.getObjectKey());
+        String presignedUrl = storageService.getPublicUrl(capa.getObjectKey());
 
         return AlbumCapaResponse.fromEntityWithUrl(capa, presignedUrl);
     }
@@ -109,7 +109,7 @@ public class AlbumCapaService {
 
         return capas.stream()
                 .map(capa -> {
-                    String presignedUrl = storageService.getPresignedUrl(capa.getObjectKey());
+                    String presignedUrl = storageService.getPublicUrl(capa.getObjectKey());
                     return AlbumCapaResponse.fromEntityWithUrl(capa, presignedUrl);
                 })
                 .collect(Collectors.toList());
@@ -128,7 +128,7 @@ public class AlbumCapaService {
         AlbumCapa capa = albumCapaRepository.findById(capaId)
                 .orElseThrow(() -> new EntityNotFoundException("Capa não encontrada com ID: " + capaId));
 
-        String presignedUrl = storageService.getPresignedUrl(capa.getObjectKey());
+        String presignedUrl = storageService.getPublicUrl(capa.getObjectKey());
         return AlbumCapaResponse.fromEntityWithUrl(capa, presignedUrl);
     }
     
@@ -149,7 +149,7 @@ public class AlbumCapaService {
         capa.setTipoCapa(tipoCapa);
         capa = albumCapaRepository.save(capa);
 
-        String presignedUrl = storageService.getPresignedUrl(capa.getObjectKey());
+        String presignedUrl = storageService.getPublicUrl(capa.getObjectKey());
         return AlbumCapaResponse.fromEntityWithUrl(capa, presignedUrl);
     }
 
@@ -170,7 +170,7 @@ public class AlbumCapaService {
         capa.setOrdem(novaOrdem);
         capa = albumCapaRepository.save(capa);
 
-        String presignedUrl = storageService.getPresignedUrl(capa.getObjectKey());
+        String presignedUrl = storageService.getPublicUrl(capa.getObjectKey());
         return AlbumCapaResponse.fromEntityWithUrl(capa, presignedUrl);
     }
     

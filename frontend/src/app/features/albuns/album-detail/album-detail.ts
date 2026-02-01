@@ -7,6 +7,7 @@ import { Layout } from '../../../shared/components/layout/layout.component';
 import { Loading } from '../../../shared/components/loaging/loading.component';
 import { ConfirmDialog } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-album-detail',
@@ -46,6 +47,8 @@ export class AlbumDetail implements OnInit {
     { value: 'PROMOCIONAL', label: 'Promocional' },
     { value: 'OUTRO', label: 'Outro' }
   ];
+
+  isProduction = environment.production;
 
   ngOnInit(): void {
     this.loadAlbum();

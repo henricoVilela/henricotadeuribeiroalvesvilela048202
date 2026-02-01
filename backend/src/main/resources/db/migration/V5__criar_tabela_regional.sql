@@ -4,10 +4,10 @@
 --   2. Não disponível no endpoint → inativar na tabela local
 --   3. Atributo alterado → inativar registro anterior e criar novo
 CREATE TABLE regional (
-    id              INTEGER         PRIMARY KEY,
+    id              BIGSERIAL       PRIMARY KEY,
     nome            VARCHAR(200)    NOT NULL,
     ativo           BOOLEAN         NOT NULL DEFAULT TRUE,
-    external_id     INTEGER         NULL,
+    external_id     BIGINT          NULL,
     created_at      TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at      TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

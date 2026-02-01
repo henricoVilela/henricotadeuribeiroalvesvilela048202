@@ -24,7 +24,7 @@ public class MinioConfig {
     @Value("${minio.secret-key:minioadmin123}")
     private String secretKey;
 
-    @Value("${minio.bucket-name:album-covers}")
+    @Value("${minio.bucket-name:album-capas}")
     private String bucketName;
 
     /**

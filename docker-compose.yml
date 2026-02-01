@@ -55,9 +55,9 @@ services:
         echo 'Aguardando MinIO iniciar...';
         sleep 10;
         mc alias set myminio http://minio:9000 $${MINIO_ROOT_USER:-minioadmin} $${MINIO_ROOT_PASSWORD:-minioadmin};
-        mc mb myminio/album-covers --ignore-existing;
-        mc anonymous set download myminio/album-covers;
-        echo 'Bucket album-covers criado com sucesso!';
+        mc mb myminio/album-capas --ignore-existing;
+        mc anonymous set download myminio/album-capas;
+        echo 'Bucket album-capas criado com sucesso!';
         exit 0;
       "
     environment:
