@@ -23,7 +23,7 @@ Sistema fullstack para gerenciamento de artistas musicais e seus álbuns, com up
 │                                                                             │
 │  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐   │
 │  │   Frontend  │    │   Backend   │    │  PostgreSQL │    │    MinIO    │   │
-│  │   Angular   │───▶│ Spring Boot │───▶│     16      │    │  (S3 API)   │   │
+│  │   Angular   │──▶  Spring Boot  ──▶      16       │    │  (S3 API)   │   │
 │  │    :4200    │    │    :8080    │    │    :5432    │    │ :9000/:9001 │   │
 │  └─────────────┘    └──────┬──────┘    └─────────────┘    └──────▲──────┘   │
 │                            │                                      │         │
